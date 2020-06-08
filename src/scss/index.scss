@@ -1,0 +1,46 @@
+@import "~bootstrap/scss/bootstrap";
+@import "./book.scss";
+@import "./cartlist.scss";
+
+body {
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    opacity: 1;
+}
+
+// nav logo
+.nav_logo {
+        top: 30px;
+        left: 42px;
+        width: 219px;
+        height: 40px;
+        opacity: 1;
+}
+
+ // 自數限2行
+.ellipsis {
+    overflow:hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    white-space: normal;
+}
+
+.bg_LightGreen {
+    background: #EAF0ED 0% 0% no-repeat padding-box;
+    opacity: 1;
+    color: #3F5D45;
+    text-align: center;
+}
+.bg_DarkGreen {
+    background: #3F5D45 0% 0% no-repeat padding-box;
+    opacity: 1;
+    color: #EAF0ED;
+    text-align: center;
+}
+.bg_Yellow {
+    height: 65px;
+    background: #FFE180 0% 0% no-repeat padding-box;
+    opacity: 1;
+}

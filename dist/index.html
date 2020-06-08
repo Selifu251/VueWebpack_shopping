@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+    <head>
+        <title>Vue 電商網站</title>
+        <meta charset="utf-8" >
+    </head>
+
+    <style>
+    </style>
+
+    <body>
+        <!-- Nav -->
+        <nav class="navbar navbar-expand-lg navbar-light container">
+            <a class="navbar-brand" href="#">
+                <img src="img/logo-all-dark.svg" height="50px;">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="?">首頁<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="?do=book">書籍</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="?do=signin">登入</a>
+                </li>
+              </ul>
+            </div>
+            <a class="nav-link" href="?do=cart">
+                <img src="img/shopping-cart.svg">
+            </a>
+        </nav>
+        <!-- // Nav -->
+        <!-- Main -->
+        <main id="app">
+            <div class="container">
+                <!-- ? 首頁 -->
+                <div v-if="getDo==''">
+                    <h1>首頁</h1>
+                </div>
+                <!-- ? -->  
+                <!-- do=book 書籍頁面 -->
+                <div v-if="getDo=='book'" class="row justify-content-around">
+                    <book-component v-for="item in data" :book="item" @incart="cartAddRemove"></book-component>
+                </div>
+                <!-- // do=book -->
+                <!-- do=sigmin 登入頁面 -->
+                <div v-if="getDo=='signin'">
+                    <h2>登入</h2>
+                </div>
+                <!-- do=sigmin 登入頁面 -->
+                <!-- do=cart 購物車頁面 -->
+                <div v-if="getDo=='cart'">
+                    <cart-component>
+                        <cartlist-component slot="cartlist" v-for="item in cookieCart" :cartlist="item" @sub-pro="addsubCartmoney" @add-pro="addsubCartmoney"></cartlist-component>
+                        <totalmoney-component slot="totalmoney" :addtotal="addMoney"></totalmoney-component>
+                    </cart-component>
+                    
+                    <!-- <div class="row">
+                        <div class="col-lg-8">
+                            <div class="bg_LightGreen"><h2>您的購物車</h2></div>
+
+                            <cartlist-component v-for="item in cookieCart" :cartlist="item"></cartlist-component>
+                            <div class="list_div row">
+                                <div class="list_pro col-lg-8 col-12 d-flex flex-row">
+                                    <div class="col-lg-4 col-6"><img src="bookimg/001.jpg" ></div>
+                                    <div class="col-lg-8 col-6 row">
+                                        <div class="col-md-6 col-12 list_name"><h3>焦糖瑪卡隆</h3>NT$300</div>
+                                        <div class="col-md-6 col-12">
+                                            <table class="tb_num">
+                                                <tr>
+                                                    <td>-</td>
+                                                    <td>1</td>
+                                                    <td>+</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-12">價格</div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <totalmoney-component></totalmoney-component>
+                            <div class="bg_DarkGreen">
+                                <h3>訂單摘要</h3>
+                                <table>
+                                    <tr>
+                                        <td>小計</td><td>NT$</td>
+                                    </tr>
+                                    <tr>
+                                        <td>運費</td><td>NT$</td>
+                                    </tr>
+                                    <tr>
+                                        <td>總計</td><td>NT$</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+                <!-- do=cart -->
+            </div>
+        </main>
+        <!-- // Main -->
+        <footer></footer>
+    </body>
+
+    <script src="index.js"></script>
+</html>
