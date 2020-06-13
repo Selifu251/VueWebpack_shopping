@@ -6,6 +6,17 @@
     </head>
 
     <style>
+        .table tr td{
+            color: #EAF0ED;
+            border: 0px;
+        }
+        .text-r {
+            text-align: right;
+        }
+        .text-l {
+            text-align: left;
+        } 
+
     </style>
 
     <body>
@@ -57,52 +68,10 @@
                 <!-- do=cart 購物車頁面 -->
                 <div v-if="getDo=='cart'">
                     <cart-component>
-                        <cartlist-component slot="cartlist" v-for="item in cookieCart" :cartlist="item" @sub-pro="addsubCartmoney" @add-pro="addsubCartmoney"></cartlist-component>
-                        <totalmoney-component slot="totalmoney" :addtotal="addMoney"></totalmoney-component>
+                        <cartlist-component slot="cartlist" v-for="item in cookieCart" :cartlist="item" @to-delmodal="toDelModal"></cartlist-component>
+                        <totalmoney-component slot="totalmoney" :addtotal="addsubCartmoney"></totalmoney-component>
+                        <delcartmodal-component slot="dlecartmodal" :delbook="delbookModal" @del-book="removeCart"></delcartmodal-component>
                     </cart-component>
-                    
-                    <!-- <div class="row">
-                        <div class="col-lg-8">
-                            <div class="bg_LightGreen"><h2>您的購物車</h2></div>
-
-                            <cartlist-component v-for="item in cookieCart" :cartlist="item"></cartlist-component>
-                            <div class="list_div row">
-                                <div class="list_pro col-lg-8 col-12 d-flex flex-row">
-                                    <div class="col-lg-4 col-6"><img src="bookimg/001.jpg" ></div>
-                                    <div class="col-lg-8 col-6 row">
-                                        <div class="col-md-6 col-12 list_name"><h3>焦糖瑪卡隆</h3>NT$300</div>
-                                        <div class="col-md-6 col-12">
-                                            <table class="tb_num">
-                                                <tr>
-                                                    <td>-</td>
-                                                    <td>1</td>
-                                                    <td>+</td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-12">價格</div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <totalmoney-component></totalmoney-component>
-                            <div class="bg_DarkGreen">
-                                <h3>訂單摘要</h3>
-                                <table>
-                                    <tr>
-                                        <td>小計</td><td>NT$</td>
-                                    </tr>
-                                    <tr>
-                                        <td>運費</td><td>NT$</td>
-                                    </tr>
-                                    <tr>
-                                        <td>總計</td><td>NT$</td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                    </div> -->
                 </div>
                 <!-- do=cart -->
             </div>

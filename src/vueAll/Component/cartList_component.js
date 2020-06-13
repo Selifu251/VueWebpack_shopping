@@ -11,29 +11,32 @@ var cartlistdiv = `
                     <table class="tb_num">
                         <tr>
                             <td @click="subPronum">-</td>
-                            <td>{{ proNum }}</td>
+                            <td>{{ cartlist.number }}</td>
                             <td @click="addPronum">+</td>
                         </tr>
                     </table>
                 </div>
             </div>
         </div>
-        <div class="col-lg-4 col-12 total_num">NT$ {{ parseInt(cartlist.price)*proNum }}</div>
+        <div class="col-lg-4 col-12 total_num">
+            NT$ {{ parseInt(cartlist.price)*cartlist.number }}
+            <img src="img/trash-2.svg" @click="toDelmodal" data-toggle="modal" data-target="#staticBackdrop">
+        </div>
     </div>
 `
 
 var totalmoneydiv = `
     <div class="bg_DarkGreen container">
         <h3 class="cart_title">訂單摘要</h3>
-        <table>
+        <table class="table">
             <tr>
-                <td>小計</td><td>NT$ {{subtotal+addtotal}}</td>
+                <td class="text-l">小計</td><td class="text-r">NT$ {{newSubtotal}}</td>
             </tr>
             <tr>
-                <td>運費</td><td>NT$ {{freight}}</td>
+                <td class="text-l">運費</td><td class="text-r">NT$ {{freight}}</td>
             </tr>
             <tr>
-                <td>總計</td><td>NT$ {{subtotal+addtotal+freight}}</td>
+                <td class="text-l">總計</td><td class="text-r">NT$ {{newAlltotal}}</td>
             </tr>
         </table>
         <div class="row">
@@ -48,9 +51,29 @@ var cartdiv = `
         <div class="col-lg-8">
             <div class="bg_LightGreen"><h2>您的購物車</h2></div>
             <slot name="cartlist"><h3>購物車目前為空</h3></slot>
+            <slot name="dlecartmodal"></slot>
         </div>
         <div class="col-lg-4">
             <slot name="totalmoney"></slot>
+        </div>
+    </div>
+`
+
+var delModaldiv = `
+    <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">確認將 [{{delbook.name}}] 移除購物車嗎?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" @click="trueDel">確認</button>
+                </div>
+            </div>
         </div>
     </div>
 `
@@ -70,17 +93,18 @@ Vue.component ('cartlist-component',{ // 購物車清單
         subPronum() { // 減少書本數量
             var vm = this;
             var subNum = 0;
-            if(vm.proNum>1){
-                vm.proNum-=1;
+            if(vm.cartlist.number>1){
+                vm.cartlist.number-=1;
                 subNum = -1*parseInt(vm.cartlist.price);
             }
-            vm.$emit('sub-pro',subNum);
         },
         addPronum() { // 增加書本數量
             var vm = this;
             var addNum = parseInt(vm.cartlist.price);
-            vm.proNum+=1;
-            vm.$emit('add-pro',addNum);
+            vm.cartlist.number+=1;
+        },
+        toDelmodal() { // 向delModal 傳cookie物件值
+            this.$emit('to-delmodal',this.cartlist);
         },
     },
 })
@@ -91,42 +115,37 @@ Vue.component ('totalmoney-component',{ // 購物車費用總計
     },
     data: function(){
         return {
-            subtotal: "",
+            subtotal: 0,
             freight: 30,
         }
     },
-    methods: {
-        jsCookie(cname){ // 尋找 cookie 值
-            var cookie = document.cookie;
-            var cvalue = null
-
-            var cookieArr = cookie.split(';');
-            cookieArr.some(function(item){
-                var itemTrim = item.trim();
-                var itemArr = itemTrim.split('=');
-                if(cname == itemArr[0]){
-                    cvalue = itemArr[1];
-                    return true;
-                }
-            });
-            return cvalue;
-        },
-    },
     template: totalmoneydiv,
-    beforeMount() {
-        console.log('totalmoney component beforeMount');
-        var vm = this;
-        const cartList = 'cartList';
-        var total = 0;
-        var cartStr = vm.jsCookie(cartList);
-        var cartArr = JSON.parse(cartStr);
-        cartArr.forEach(function(item){
-            total += parseInt(item.price);
-        })
-        vm.subtotal = total;
+    computed: {
+        newSubtotal() { // 小計
+            var vm = this;
+            var newsubtotal = vm.addtotal;
+            return newsubtotal;
+        },
+        newAlltotal() { // 總計
+            var vm = this;
+            var newalltotal = vm.freight+vm.addtotal;
+            return newalltotal;
+        },
     },
 })
 
 Vue.component ('cart-component',{ // 購物車
     template: cartdiv,
+})
+
+Vue.component ('delcartmodal-component',{ // 商品移出購物車前確認視窗
+    props: {
+        delbook: {},
+    },
+    template: delModaldiv,
+    methods: {
+        trueDel() {
+            this.$emit('del-book',this.delbook);
+        }
+    },
 })
